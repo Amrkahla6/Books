@@ -1,10 +1,7 @@
 package com.luv2code.books.controller;
 
 import com.luv2code.books.entity.Book;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,5 +45,17 @@ public class BookController {
                 .filter(book -> book.getTitle().equalsIgnoreCase(title))
                 .findFirst()
                 .orElse(null);
+    }
+
+    @PostMapping("/api/books")
+    public void createBooks(@RequestBody Book newBook){
+
+        for (Book book : books){
+            if (book.getTitle().equalsIgnoreCase(newBook.getTitle())){
+                return;
+            }
+        }
+
+        books.add(newBook);
     }
 }

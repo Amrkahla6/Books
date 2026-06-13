@@ -3,6 +3,7 @@ package com.luv2code.books.controller;
 import com.luv2code.books.entity.Book;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -19,19 +20,32 @@ public class BookController {
 
     private void initializeBooks(){
         books.addAll(List.of(
-                new Book("Title 0ne","Author 1", "Category one"),
-                new Book("Title Two","Author 2", "Category Two"),
-                new Book("Title Three","Author 3", "Category Three"),
-                new Book("Title Four","Author 4", "Category Four"),
-                new Book("Title Five","Author 5", "Category Five"),
-                new Book("Title Six","Author 6", "Category Six")
+                new Book("Title 0ne","Author 1", "science"),
+                new Book("Title Two","Author 2", "science"),
+                new Book("Title Three","Author 3", "history"),
+                new Book("Title Four","Author 4", "history"),
+                new Book("Title Five","Author 5", "Math"),
+                new Book("Title Six","Author 6", "Math")
               )
         );
     }
 
     @GetMapping("/api/books")
-    public List<Book> books(){
-        return books;
+    public List<Book> books(@RequestParam(required = false) String category){
+
+        if (category == null){
+            return books;
+        }
+
+        List<Book> filterBooks = new ArrayList<>();
+
+        for (Book book : books){
+            if (book.getCategory().equalsIgnoreCase(category)){
+                filterBooks.add(book);
+            }
+        }
+
+        return filterBooks;
     }
 
     @GetMapping("/api/books/{title}")

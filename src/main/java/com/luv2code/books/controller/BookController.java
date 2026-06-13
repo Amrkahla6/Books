@@ -37,15 +37,9 @@ public class BookController {
             return books;
         }
 
-        List<Book> filterBooks = new ArrayList<>();
-
-        for (Book book : books){
-            if (book.getCategory().equalsIgnoreCase(category)){
-                filterBooks.add(book);
-            }
-        }
-
-        return filterBooks;
+        return books.stream()
+                .filter(book -> book.getCategory().equalsIgnoreCase(category))
+                .toList();
     }
 
     @GetMapping("/api/books/{title}")

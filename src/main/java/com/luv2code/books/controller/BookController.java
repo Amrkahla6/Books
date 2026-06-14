@@ -51,22 +51,9 @@ public class BookController {
 
     @PostMapping
     public String createBook(@RequestBody BookRequest bookRequest){
-       int id;
-       if (books.isEmpty()){
-           id = 1;
-       }else{
-           id = Math.toIntExact(books.getLast().getId() + 1);
-       }
+        int id = books.isEmpty() ? 1 : Math.toIntExact(books.getLast().getId() + 1);
 
-       Book book = new Book(
-               id,
-               bookRequest.getTitle(),
-               bookRequest.getAuthor(),
-               bookRequest.getCategory(),
-               bookRequest.getRating()
-       );
-
-        books.add(book);
+        convertToBook(id, bookRequest);
 
         return "The book has been created";
     }
@@ -84,5 +71,17 @@ public class BookController {
     public String deleteBook(@PathVariable int id){
         books.removeIf(book -> book.getId() == id);
         return "Deleted Successfully";
+    }
+
+    private void convertToBook(int id, BookRequest bookRequest){
+        Book book = new Book(
+                id,
+                bookRequest.getTitle(),
+                bookRequest.getAuthor(),
+                bookRequest.getCategory(),
+                bookRequest.getRating()
+        );
+
+        books.add(book);
     }
 }

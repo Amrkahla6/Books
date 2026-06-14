@@ -1,14 +1,18 @@
 package com.luv2code.books.entity;
 
 public class Book {
+    private int id;
     private String title;
     private String author;
     private String category;
+    private int rating;
 
-    public Book(String title, String author, String category) {
+    public Book(int id,String title, String author, String category, int rating) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.category = category;
+        this.rating = rating;
     }
 
     public String getTitle() {
@@ -17,6 +21,14 @@ public class Book {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getAuthor() {
@@ -33,5 +45,13 @@ public class Book {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

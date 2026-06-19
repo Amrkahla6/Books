@@ -2,6 +2,7 @@ package com.luv2code.books.controller;
 
 import com.luv2code.books.entity.Book;
 import com.luv2code.books.request.BookRequest;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +52,7 @@ public class BookController {
     }
 
     @PostMapping
-    public String createBook(@RequestBody BookRequest bookRequest){
+    public String createBook(@Valid @RequestBody BookRequest bookRequest){
         int id = books.isEmpty() ? 1 : Math.toIntExact(books.getLast().getId() + 1);
 
         convertToBook(id, bookRequest);
@@ -60,7 +61,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public void updateBook(@PathVariable @Min(value = 1) int id,@RequestBody BookRequest bookRequest){
+    public void updateBook(@PathVariable @Min(value = 1) int id,@Valid @RequestBody BookRequest bookRequest){
         for (int i =0; i < books.size(); i++){
             if (books.get(i).getId() == id){
                 Book updatedBook = convertToBook(id,bookRequest);

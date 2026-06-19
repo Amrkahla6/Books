@@ -1,10 +1,22 @@
 package com.luv2code.books.request;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
+
 public class BookRequest {
 
+    @Size(min = 1, max = 40, message = "Title is between one and 40 characters")
     private String title;
+
+    @Size(min = 1, max = 40, message = "Author is between one and 40 characters")
     private String author;
+
+    @Size(min = 1, max = 30, message = "Category is between one and 30 characters")
     private String category;
+
+    @Min(value = 1, message = "Rating must be at least one")
+    @Max(value = 5, message = "Rating max is five")
     private int rating;
 
     public BookRequest(String title, int rating, String category, String author) {

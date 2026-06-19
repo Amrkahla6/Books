@@ -2,6 +2,8 @@ package com.luv2code.books.controller;
 
 import com.luv2code.books.entity.Book;
 import com.luv2code.books.request.BookRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Tag(name = "Books Rest API Endpoints", description = "Operations related to books")
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -32,6 +35,7 @@ public class BookController {
         );
     }
 
+    @Operation(summary = "Get all books", description = "Retrieve a list of all available books")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<Book> books(@RequestParam(required = false) String category){
@@ -45,6 +49,7 @@ public class BookController {
                 .toList();
     }
 
+    @Operation(summary = "Get a book by Id", description = "Retrieve a specific book by Id")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public Book getBookById(@PathVariable @Min(value = 1) int id){
@@ -54,6 +59,7 @@ public class BookController {
                 .orElse(null);
     }
 
+    @Operation(summary = "Create a new book", description = "Add a new book to the list")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public String createBook(@Valid @RequestBody BookRequest bookRequest){
@@ -64,6 +70,7 @@ public class BookController {
         return "The book has been created";
     }
 
+    @Operation(summary = "Update a book", description = "Update the details of an existing book")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
     public void updateBook(@PathVariable @Min(value = 1) int id,@Valid @RequestBody BookRequest bookRequest){
@@ -75,6 +82,7 @@ public class BookController {
         }
     }
 
+    @Operation(summary = "Delete a book", description = "Remove a book from the list")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public String deleteBook(@PathVariable @Min(value = 1) int id){

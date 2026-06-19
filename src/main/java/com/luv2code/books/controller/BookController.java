@@ -59,9 +59,10 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public void updateBook(@PathVariable int id,@RequestBody Book updatedBook){
+    public void updateBook(@PathVariable int id,@RequestBody BookRequest bookRequest){
         for (int i =0; i < books.size(); i++){
             if (books.get(i).getId() == id){
+                Book updatedBook = convertToBook(id,bookRequest);
                 books.set(i,updatedBook);
                 return;            }
         }
@@ -73,15 +74,13 @@ public class BookController {
         return "Deleted Successfully";
     }
 
-    private void convertToBook(int id, BookRequest bookRequest){
-        Book book = new Book(
+    private Book convertToBook(int id, BookRequest bookRequest){
+        return new Book(
                 id,
                 bookRequest.getTitle(),
                 bookRequest.getAuthor(),
                 bookRequest.getCategory(),
                 bookRequest.getRating()
         );
-
-        books.add(book);
     }
 }

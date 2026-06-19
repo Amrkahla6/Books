@@ -1,6 +1,8 @@
 package com.luv2code.books.controller;
 
 import com.luv2code.books.entity.Book;
+import com.luv2code.books.exceptions.BookErrorResponse;
+import com.luv2code.books.exceptions.BookNotFoundException;
 import com.luv2code.books.request.BookRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -8,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -59,7 +62,9 @@ public class BookController {
         return books.stream()
                 .filter(book -> book.getId() == id)
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(
+                        () -> new BookNotFoundException("Book not found with id " + id)
+                );
     }
 
     @Operation(summary = "Create a new book", description = "Add a new book to the list")
@@ -103,5 +108,16 @@ public class BookController {
                 bookRequest.getCategory(),
                 bookRequest.getRating()
         );
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<BookErrorResponse> handleExceptions(BookNotFoundException exception){
+        BookErrorResponse bookErrorResponse = new BookErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                exception.getMessage(),
+                System.currentTimeMillis()
+        );
+
+        return new ResponseEntity<>(bookErrorResponse, HttpStatus.NOT_FOUND);
     }
 }

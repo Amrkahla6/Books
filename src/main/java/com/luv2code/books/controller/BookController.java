@@ -4,6 +4,7 @@ import com.luv2code.books.entity.Book;
 import com.luv2code.books.request.BookRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class BookController {
         );
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<Book> books(@RequestParam(required = false) String category){
 
@@ -43,6 +45,7 @@ public class BookController {
                 .toList();
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public Book getBookById(@PathVariable @Min(value = 1) int id){
         return books.stream()
@@ -51,6 +54,7 @@ public class BookController {
                 .orElse(null);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public String createBook(@Valid @RequestBody BookRequest bookRequest){
         int id = books.isEmpty() ? 1 : Math.toIntExact(books.getLast().getId() + 1);
@@ -60,6 +64,7 @@ public class BookController {
         return "The book has been created";
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
     public void updateBook(@PathVariable @Min(value = 1) int id,@Valid @RequestBody BookRequest bookRequest){
         for (int i =0; i < books.size(); i++){
@@ -70,6 +75,7 @@ public class BookController {
         }
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public String deleteBook(@PathVariable @Min(value = 1) int id){
         books.removeIf(book -> book.getId() == id);
